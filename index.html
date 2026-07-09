@@ -96,9 +96,9 @@ tailwind.config = {
             </section>
 
             <div class="flex flex-wrap gap-4 mb-8 px-2">
-              <button onclick="switchTab('sem3')" id="tab-sem3" class="px-6 py-3 font-medium text-sm bg-neu-box text-neu-highlight rounded-2xl transition-all">Semester III</button>
-              <button onclick="switchTab('sem1')" id="tab-sem1" class="px-6 py-3 font-medium text-sm hover:bg-neu-box text-red-500 hover:text-red-600 rounded-2xl transition-all">Semester I</button>
-            </div>
+                    <button onclick="switchTab('sem3')" id="tab-sem3" class="px-6 py-3 font-medium text-sm border border-neu-track bg-neu-box text-neu-highlight rounded-2xl transition-all">Semester III</button>
+                    <button onclick="switchTab('sem1')" id="tab-sem1" class="px-6 py-3 font-medium text-sm border border-neu-track hover:bg-neu-box text-red-500 hover:text-red-600 rounded-2xl transition-all">Semester I</button>
+                  </div>
 
         <div id="subject-roots" class="flex flex-wrap gap-3 mb-10 px-2 hidden"></div>
 
@@ -573,25 +573,25 @@ tailwind.config = {
     }
 
   function renderSubjectRoots() {
-        const container = document.getElementById('subject-roots');
-        if (!container) return;
+          const container = document.getElementById('subject-roots');
+          if (!container) return;
     
-        container.classList.remove('hidden');
-        let html = `<button onclick="switchSubject('all')" class="px-5 py-2 font-medium text-xs rounded-xl transition-all ${targetedSubjectFilter === 'all' ? 'bg-neu-box text-neu-highlight' : 'hover:bg-neu-box text-neu-text hover:text-neu-highlight'}">All</button>`;
+          container.classList.remove('hidden');
+          let html = `<button onclick="switchSubject('all')" class="px-5 py-2 font-medium text-xs border border-neu-track rounded-xl transition-all ${targetedSubjectFilter === 'all' ? 'bg-neu-box text-neu-highlight' : 'hover:bg-neu-box text-neu-text hover:text-neu-highlight'}">All</button>`;
     
-        curriculumSyllabus.forEach(subject => {
-          if (targetedActiveFilter === 'sem1' && subject.semester !== 1) return;
-          if (targetedActiveFilter === 'sem3' && subject.semester !== 3) return;
+          curriculumSyllabus.forEach(subject => {
+            if (targetedActiveFilter === 'sem1' && subject.semester !== 1) return;
+            if (targetedActiveFilter === 'sem3' && subject.semester !== 3) return;
       
-          const shortName = subjectShortNames[subject.id] || subject.title;
-          const isActive = targetedSubjectFilter === subject.id;
-          const btnClass = isActive ? 'bg-neu-box text-neu-highlight' : 'hover:bg-neu-box text-neu-text hover:text-neu-highlight';
+            const shortName = subjectShortNames[subject.id] || subject.title;
+            const isActive = targetedSubjectFilter === subject.id;
+            const btnClass = isActive ? 'bg-neu-box text-neu-highlight' : 'hover:bg-neu-box text-neu-text hover:text-neu-highlight';
       
-          html += `<button onclick="switchSubject('${subject.id}')" class="px-5 py-2 font-medium text-xs rounded-xl transition-all ${btnClass}">${shortName}</button>`;
-        });
+            html += `<button onclick="switchSubject('${subject.id}')" class="px-5 py-2 font-medium text-xs border border-neu-track rounded-xl transition-all ${btnClass}">${shortName}</button>`;
+          });
     
-        container.innerHTML = html;
-      }
+          container.innerHTML = html;
+        }
 
       function switchSubject(subjectId) {
         targetedSubjectFilter = subjectId;
@@ -600,27 +600,27 @@ tailwind.config = {
       }
 
       function switchTab(type) {
-          targetedActiveFilter = type;
-          targetedSubjectFilter = 'all'; // Reset subject filter when changing semesters
-          ['sem3', 'sem1'].forEach(t => {
-            const btn = document.getElementById(`tab-${t}`);
-            if (btn) {
-              const isSelected = (t === type);
-              const bgClass = isSelected ? "bg-neu-box" : "hover:bg-neu-box";
+                targetedActiveFilter = type;
+                targetedSubjectFilter = 'all'; // Reset subject filter when changing semesters
+                ['sem3', 'sem1'].forEach(t => {
+                  const btn = document.getElementById(`tab-${t}`);
+                  if (btn) {
+                    const isSelected = (t === type);
+                    const bgClass = isSelected ? "bg-neu-box" : "hover:bg-neu-box";
         
-              let color = "";
-              if (t === 'sem1') {
-                color = isSelected ? "text-red-600" : "text-red-500 hover:text-red-600";
-              } else {
-                color = isSelected ? "text-neu-highlight" : "text-neu-text hover:text-neu-highlight";
+                    let color = "";
+                    if (t === 'sem1') {
+                      color = isSelected ? "text-red-600" : "text-red-500 hover:text-red-600";
+                    } else {
+                      color = isSelected ? "text-neu-highlight" : "text-neu-text hover:text-neu-highlight";
+                    }
+        
+                    btn.className = `px-6 py-3 font-medium text-sm border border-neu-track rounded-2xl transition-all ${bgClass} ${color}`;
+                  }
+                });
+                renderSubjectRoots();
+                renderCurriculumStructure();
               }
-        
-              btn.className = `px-6 py-3 font-medium text-sm rounded-2xl transition-all ${bgClass} ${color}`;
-            }
-          });
-          renderSubjectRoots();
-          renderCurriculumStructure();
-        }
 
     function updateSyncStatus(msg, isProcessing = false, isError = false) {
       const dot = document.getElementById('sync-dot');
