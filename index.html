@@ -607,11 +607,11 @@ tailwind.config = {
       try {
         const doc = await USER_DOC.get();
         if (doc.exists) {
-          completedTopicsMap = doc.data().completedTopicsMap || {};
-          updateSyncStatus('Data Loaded & Synced');
-        } else {
-          updateSyncStatus('No remote profile found');
-        }
+                completedTopicsMap = doc.data().completedTopicsMap || {};
+                updateSyncStatus('Data Loaded & Synced');
+              } else {
+                updateSyncStatus('New Profile Ready');
+              }
       } catch(e) {
         console.error("Initialization data lookup crashed:", e);
         updateSyncStatus('Offline / Connection Failed', false, true);
