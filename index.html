@@ -81,39 +81,24 @@ tailwind.config = {
   <main class="max-w-7xl mx-auto px-4 py-8 pt-12">
     
       <section class="mb-12 flex justify-center px-4 mt-6">
-                    <div class="w-full max-w-3xl flex flex-col gap-2">
-                      <div class="flex items-center px-1">
-                                  <div id="sync-dot" class="w-2.5 h-2.5 rounded-full bg-neu-accent shrink-0 transition-colors duration-300" title="Initializing..."></div>
-                                </div>
-                                <div class="w-full bg-neu-track rounded-full h-4 overflow-hidden p-1 relative z-10">
-                                  <div id="global-progress-bar" class="h-full rounded-full transition-all duration-500 ease-out" style="width: 0%; background-color: hsl(0, 85%, 55%);"></div>
-                                </div>
-                                <div class="w-full relative h-8 mt-1 z-0">
-                                  <div id="turtle-runner" class="absolute top-0 transition-all duration-500 ease-out text-2xl drop-shadow-sm" style="left: 0%; transform: translateX(-50%) scaleX(-1);">🐢</div>
-                                  <div class="absolute right-0 top-0 text-xl drop-shadow-sm opacity-80 pr-2" title="Finish Line!">🏁</div>
-                                </div>
-                              </div>
-                            </section>
-
-          <div class="flex flex-wrap gap-4 mb-8 px-2">
-                <button onclick="switchTab('sem3')" id="tab-sem3" class="px-6 py-3 font-medium text-sm bg-neu-box text-neu-highlight rounded-2xl transition-all">Semester III</button>
-                <button onclick="switchTab('sem1')" id="tab-sem1" class="px-6 py-3 font-medium text-sm hover:bg-neu-box text-red-500 hover:text-red-600 rounded-2xl transition-all">Semester I</button>
+              <div class="w-full max-w-3xl flex flex-col gap-2">
+                <div class="flex items-center px-1">
+                  <div id="sync-dot" class="w-2.5 h-2.5 rounded-full bg-neu-accent shrink-0 transition-colors duration-300" title="Initializing..."></div>
+                </div>
+                <div class="w-full bg-neu-track rounded-full h-4 overflow-hidden p-1 relative z-10">
+                  <div id="global-progress-bar" class="h-full rounded-full transition-all duration-500 ease-out" style="width: 0%; background-color: hsl(0, 85%, 55%);"></div>
+                </div>
+                <div class="w-full relative h-8 mt-1 z-0">
+                  <div id="turtle-runner" class="absolute top-0 transition-all duration-500 ease-out text-2xl drop-shadow-sm" style="left: 0%; transform: translateX(-50%) scaleX(-1);">🐢</div>
+                  <div class="absolute right-0 top-0 text-xl drop-shadow-sm opacity-80 pr-2" title="Finish Line!">🏁</div>
+                </div>
               </div>
-                          </div>
-                          <div class="w-full shadow-neu-in rounded-full h-4 overflow-hidden p-1 bg-neu-bg relative z-10">
-                                                      <div id="global-progress-bar" class="shadow-neu-out h-full rounded-full transition-all duration-500 ease-out" style="width: 0%; background-color: hsl(0, 85%, 55%);"></div>
-                                                    </div>
-                                                    <div class="w-full relative h-8 mt-1 z-0">
-                                                      <div id="turtle-runner" class="absolute top-0 transition-all duration-500 ease-out text-2xl drop-shadow-sm" style="left: 0%; transform: translateX(-50%) scaleX(-1);">🐢</div>
-                                                      <div class="absolute right-0 top-0 text-xl drop-shadow-sm opacity-80 pr-2" title="Finish Line!">🏁</div>
-                                                    </div>
-                        </div>
-                      </section>
+            </section>
 
-    <div class="flex flex-wrap gap-4 mb-8 px-2">
-          <button onclick="switchTab('sem3')" id="tab-sem3" class="px-6 py-3 font-medium text-sm shadow-neu-in text-neu-highlight rounded-2xl transition-all">Semester III</button>
-          <button onclick="switchTab('sem1')" id="tab-sem1" class="px-6 py-3 font-medium text-sm shadow-neu-out text-red-500 hover:text-red-600 rounded-2xl transition-all">Semester I</button>
-        </div>
+            <div class="flex flex-wrap gap-4 mb-8 px-2">
+              <button onclick="switchTab('sem3')" id="tab-sem3" class="px-6 py-3 font-medium text-sm bg-neu-box text-neu-highlight rounded-2xl transition-all">Semester III</button>
+              <button onclick="switchTab('sem1')" id="tab-sem1" class="px-6 py-3 font-medium text-sm hover:bg-neu-box text-red-500 hover:text-red-600 rounded-2xl transition-all">Semester I</button>
+            </div>
 
         <div id="subject-roots" class="flex flex-wrap gap-3 mb-10 px-2 hidden"></div>
 
