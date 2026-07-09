@@ -15,12 +15,12 @@ tailwind.config = {
     extend: {
       colors: {
         neu: {
-          bg: '#fbfaf6',
-          box: '#f2f0e6',
-          track: '#e8e5d8',
-          text: '#000000',
-          accent: '#666666',
-          highlight: '#000000'
+          bg: 'var(--neu-bg)',
+          box: 'var(--neu-box)',
+          track: 'var(--neu-track)',
+          text: 'var(--neu-text)',
+          accent: 'var(--neu-accent)',
+          highlight: 'var(--neu-highlight)'
         }
       },
       fontFamily: {
@@ -32,26 +32,42 @@ tailwind.config = {
 }
 </script>
 <style>
+  :root {
+    --neu-bg: #fbfaf6;
+    --neu-box: #f2f0e6;
+    --neu-track: #e8e5d8;
+    --neu-text: #000000;
+    --neu-accent: #666666;
+    --neu-highlight: #000000;
+  }
+  .dark-mode {
+    --neu-bg: #000432;
+    --neu-box: #080c4a;
+    --neu-track: #15195c;
+    --neu-text: #e2e8f0;
+    --neu-accent: #818cf8;
+    --neu-highlight: #c7d2fe;
+  }
   body {
-    background-color: #fbfaf6;
-    color: #000000;
+    background-color: var(--neu-bg);
+    color: var(--neu-text);
     font-weight: 400;
   }
   .custom-scrollbar::-webkit-scrollbar {
     width: 8px;
   }
   .custom-scrollbar::-webkit-scrollbar-track {
-    background: #fbfaf6;
+    background: var(--neu-bg);
     border-radius: 4px;
     margin-block: 10px;
   }
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #e8e5d8;
+    background: var(--neu-track);
     border-radius: 4px;
   }
   input[type="checkbox"] {
     appearance: none;
-    background-color: #e8e5d8;
+    background-color: var(--neu-track);
     margin: 0;
     font: inherit;
     color: currentColor;
@@ -69,14 +85,26 @@ tailwind.config = {
     border-radius: 2px;
     transform: scale(0);
     transition: 150ms transform ease-in-out;
-    background-color: #000000;
+    background-color: var(--neu-highlight);
   }
   input[type="checkbox"]:checked::before {
     transform: scale(1);
   }
 </style>
+<script>
+  function initTheme() {
+    if (localStorage.getItem('bca-theme') === 'dark') {
+      document.documentElement.classList.add('dark-mode');
+    }
+  }
+  initTheme();
+</script>
 </head>
-<body class="font-sans antialiased min-height-screen pb-12">
+<body class="font-sans antialiased min-height-screen pb-12 transition-colors duration-300">
+
+  <button id="theme-toggle" onclick="toggleTheme()" class="fixed top-6 right-6 z-50 w-12 h-12 flex items-center justify-center rounded-full bg-neu-box border border-neu-track text-neu-text hover:text-neu-highlight shadow-sm transition-all" title="Toggle Theme">
+    <i class="fa-solid fa-moon"></i>
+  </button>
 
   <main class="max-w-7xl mx-auto px-4 py-8 pt-12">
     
@@ -459,10 +487,10 @@ tailwind.config = {
                 subject.units.forEach((unit, unitIdx) => {
                   html += `
                     <div class="bg-neu-box p-5 rounded-[20px]">
-                      <h4 class="text-[11px] font-medium text-neu-text pb-2 mb-4 border-b border-neu-accent/20 uppercase tracking-widest font-mono flex items-center gap-2">
-                        <i class="fa-regular fa-folder text-neu-highlight"></i> ${unit.name}
-                      </h4>
-                      <ul class="space-y-4">
+                                          <h4 class="text-[11px] font-medium text-neu-text pb-2 mb-4 border-b border-neu-track uppercase tracking-widest font-mono flex items-center gap-2">
+                                            <i class="fa-regular fa-folder text-neu-highlight"></i> ${unit.name}
+                                          </h4>
+                                          <ul class="space-y-4">
                   `;
 
         unit.topics.forEach((topic, topicIdx) => {
@@ -650,8 +678,27 @@ tailwind.config = {
     }
   }
 
-  window.addEventListener('DOMContentLoaded', async () => {
-    updateSyncStatus('Loading curriculum data...', true);
+  function toggleTheme() {
+      const root = document.documentElement;
+      root.classList.toggle('dark-mode');
+      const isDark = root.classList.contains('dark-mode');
+      localStorage.setItem('bca-theme', isDark ? 'dark' : 'light');
+    
+      const icon = document.querySelector('#theme-toggle i');
+      if (icon) {
+        icon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      // Ensure correct icon is set based on initial theme
+      const isDark = document.documentElement.classList.contains('dark-mode');
+      const icon = document.querySelector('#theme-toggle i');
+      if (icon) {
+        icon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+      }
+
+      updateSyncStatus('Loading curriculum data...', true);
     try {
       const doc = await USER_DOC.get();
       if (doc.exists) {
