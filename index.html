@@ -16,16 +16,12 @@ tailwind.config = {
       colors: {
         neu: {
           bg: '#fbfaf6',
+          box: '#f2f0e6',
+          track: '#e8e5d8',
           text: '#000000',
           accent: '#666666',
           highlight: '#000000'
         }
-      },
-      boxShadow: {
-        'neu-out': '10px 10px 20px rgba(212,208,200,0.6), -10px -10px 20px rgba(255,255,255,0.8)',
-        'neu-in': 'inset 8px 8px 16px rgba(212,208,200,0.6), inset -8px -8px 16px rgba(255,255,255,0.8)',
-        'neu-sm-out': '5px 5px 10px rgba(212,208,200,0.5), -5px -5px 10px rgba(255,255,255,0.8)',
-        'neu-sm-in': 'inset 3px 3px 6px rgba(212,208,200,0.5), inset -3px -3px 6px rgba(255,255,255,0.8)',
       },
       fontFamily: {
         sans: ['Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'],
@@ -46,25 +42,22 @@ tailwind.config = {
   }
   .custom-scrollbar::-webkit-scrollbar-track {
     background: #fbfaf6;
-    box-shadow: inset 2px 2px 5px rgba(212,208,200,0.5), inset -2px -2px 5px rgba(255,255,255,0.8);
     border-radius: 4px;
     margin-block: 10px;
   }
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #fbfaf6;
-    box-shadow: 2px 2px 5px rgba(212,208,200,0.5), -2px -2px 5px rgba(255,255,255,0.8);
+    background: #e8e5d8;
     border-radius: 4px;
   }
   input[type="checkbox"] {
     appearance: none;
-    background-color: #fbfaf6;
+    background-color: #e8e5d8;
     margin: 0;
     font: inherit;
     color: currentColor;
     width: 1.25em;
     height: 1.25em;
     border-radius: 0.35em;
-    box-shadow: inset 3px 3px 6px rgba(212,208,200,0.6), inset -3px -3px 6px rgba(255,255,255,0.8);
     display: grid;
     place-content: center;
     transition: all 0.2s ease-in-out;
@@ -76,7 +69,6 @@ tailwind.config = {
     border-radius: 2px;
     transform: scale(0);
     transition: 150ms transform ease-in-out;
-    box-shadow: 2px 2px 4px rgba(212,208,200,0.6), -2px -2px 4px rgba(255,255,255,0.8);
     background-color: #000000;
   }
   input[type="checkbox"]:checked::before {
@@ -89,9 +81,24 @@ tailwind.config = {
   <main class="max-w-7xl mx-auto px-4 py-8 pt-12">
     
       <section class="mb-12 flex justify-center px-4 mt-6">
-              <div class="w-full max-w-3xl flex flex-col gap-2">
-                <div class="flex items-center px-1">
-                            <div id="sync-dot" class="w-2.5 h-2.5 rounded-full bg-neu-accent shrink-0 shadow-[inset_1px_1px_2px_rgba(0,0,0,0.2)] transition-colors duration-300" title="Initializing..."></div>
+                    <div class="w-full max-w-3xl flex flex-col gap-2">
+                      <div class="flex items-center px-1">
+                                  <div id="sync-dot" class="w-2.5 h-2.5 rounded-full bg-neu-accent shrink-0 transition-colors duration-300" title="Initializing..."></div>
+                                </div>
+                                <div class="w-full bg-neu-track rounded-full h-4 overflow-hidden p-1 relative z-10">
+                                  <div id="global-progress-bar" class="h-full rounded-full transition-all duration-500 ease-out" style="width: 0%; background-color: hsl(0, 85%, 55%);"></div>
+                                </div>
+                                <div class="w-full relative h-8 mt-1 z-0">
+                                  <div id="turtle-runner" class="absolute top-0 transition-all duration-500 ease-out text-2xl drop-shadow-sm" style="left: 0%; transform: translateX(-50%) scaleX(-1);">🐢</div>
+                                  <div class="absolute right-0 top-0 text-xl drop-shadow-sm opacity-80 pr-2" title="Finish Line!">🏁</div>
+                                </div>
+                              </div>
+                            </section>
+
+          <div class="flex flex-wrap gap-4 mb-8 px-2">
+                <button onclick="switchTab('sem3')" id="tab-sem3" class="px-6 py-3 font-medium text-sm bg-neu-box text-neu-highlight rounded-2xl transition-all">Semester III</button>
+                <button onclick="switchTab('sem1')" id="tab-sem1" class="px-6 py-3 font-medium text-sm hover:bg-neu-box text-red-500 hover:text-red-600 rounded-2xl transition-all">Semester I</button>
+              </div>
                           </div>
                           <div class="w-full shadow-neu-in rounded-full h-4 overflow-hidden p-1 bg-neu-bg relative z-10">
                                                       <div id="global-progress-bar" class="shadow-neu-out h-full rounded-full transition-all duration-500 ease-out" style="width: 0%; background-color: hsl(0, 85%, 55%);"></div>
@@ -440,38 +447,38 @@ tailwind.config = {
           if (targetedSubjectFilter !== 'all' && subject.id !== targetedSubjectFilter) return;
 
           const subjectCard = document.createElement('div');
-            subjectCard.className = "flex flex-col mb-8";
-            subjectCard.id = `card-${subject.id}`;
+                      subjectCard.className = "flex flex-col mb-8";
+                      subjectCard.id = `card-${subject.id}`;
 
-            let html = `
-              <div class="flex flex-col h-full">
-                <div class="mb-6 px-2">
-                  <div class="flex justify-between items-end gap-2 mb-3">
-                    <div>
-                      <span class="text-xs font-mono tracking-widest font-medium text-neu-accent uppercase block mb-1">SEM ${subject.semester} • ${subject.code}</span>
-                      <h3 class="font-light text-2xl text-neu-text tracking-wide">${subject.title}</h3>
-                    </div>
-                    <div class="text-right mb-1">
-                      <span id="perc-${subject.id}" class="font-mono text-lg font-light text-neu-highlight">0%</span>
-                    </div>
-                  </div>
-            
-                  <div class="w-full shadow-neu-in h-3 rounded-full overflow-hidden p-1">
-                                <div id="bar-${subject.id}" class="shadow-neu-out h-full rounded-full transition-all duration-300 ease-out" style="width: 0%; background-color: hsl(0, 85%, 55%);"></div>
+                      let html = `
+                        <div class="flex flex-col h-full">
+                          <div class="mb-6 px-2">
+                            <div class="flex justify-between items-end gap-2 mb-3">
+                              <div>
+                                <span class="text-xs font-mono tracking-widest font-medium text-neu-accent uppercase block mb-1">SEM ${subject.semester} • ${subject.code}</span>
+                                <h3 class="font-light text-2xl text-neu-text tracking-wide">${subject.title}</h3>
                               </div>
-                </div>
+                              <div class="text-right mb-1">
+                                <span id="perc-${subject.id}" class="font-mono text-lg font-light text-neu-highlight">0%</span>
+                              </div>
+                            </div>
+            
+                            <div class="w-full bg-neu-track h-3 rounded-full overflow-hidden p-1">
+                                          <div id="bar-${subject.id}" class="h-full rounded-full transition-all duration-300 ease-out" style="width: 0%; background-color: hsl(0, 85%, 55%);"></div>
+                                        </div>
+                          </div>
           
-                <div class="space-y-6 px-2 py-2">
-            `;
+                          <div class="space-y-6 px-2 py-2">
+                      `;
 
-      subject.units.forEach((unit, unitIdx) => {
-        html += `
-          <div class="shadow-neu-sm-out p-5 rounded-[20px]">
-            <h4 class="text-[11px] font-medium text-neu-text pb-2 mb-4 border-b border-neu-accent/20 uppercase tracking-widest font-mono flex items-center gap-2">
-              <i class="fa-regular fa-folder text-neu-highlight"></i> ${unit.name}
-            </h4>
-            <ul class="space-y-4">
-        `;
+                subject.units.forEach((unit, unitIdx) => {
+                  html += `
+                    <div class="bg-neu-box p-5 rounded-[20px]">
+                      <h4 class="text-[11px] font-medium text-neu-text pb-2 mb-4 border-b border-neu-accent/20 uppercase tracking-widest font-mono flex items-center gap-2">
+                        <i class="fa-regular fa-folder text-neu-highlight"></i> ${unit.name}
+                      </h4>
+                      <ul class="space-y-4">
+                  `;
 
         unit.topics.forEach((topic, topicIdx) => {
                   const uniqueId = `${subject.id}_u${unitIdx}_t${topicIdx}`;
@@ -581,54 +588,54 @@ tailwind.config = {
     }
 
   function renderSubjectRoots() {
-      const container = document.getElementById('subject-roots');
-      if (!container) return;
+        const container = document.getElementById('subject-roots');
+        if (!container) return;
     
-      container.classList.remove('hidden');
-      let html = `<button onclick="switchSubject('all')" class="px-5 py-2 font-medium text-xs rounded-xl transition-all ${targetedSubjectFilter === 'all' ? 'shadow-neu-in text-neu-highlight' : 'shadow-neu-out text-neu-text hover:text-neu-highlight'}">All</button>`;
+        container.classList.remove('hidden');
+        let html = `<button onclick="switchSubject('all')" class="px-5 py-2 font-medium text-xs rounded-xl transition-all ${targetedSubjectFilter === 'all' ? 'bg-neu-box text-neu-highlight' : 'hover:bg-neu-box text-neu-text hover:text-neu-highlight'}">All</button>`;
     
-      curriculumSyllabus.forEach(subject => {
-        if (targetedActiveFilter === 'sem1' && subject.semester !== 1) return;
-        if (targetedActiveFilter === 'sem3' && subject.semester !== 3) return;
+        curriculumSyllabus.forEach(subject => {
+          if (targetedActiveFilter === 'sem1' && subject.semester !== 1) return;
+          if (targetedActiveFilter === 'sem3' && subject.semester !== 3) return;
       
-        const shortName = subjectShortNames[subject.id] || subject.title;
-        const isActive = targetedSubjectFilter === subject.id;
-        const btnClass = isActive ? 'shadow-neu-in text-neu-highlight' : 'shadow-neu-out text-neu-text hover:text-neu-highlight';
+          const shortName = subjectShortNames[subject.id] || subject.title;
+          const isActive = targetedSubjectFilter === subject.id;
+          const btnClass = isActive ? 'bg-neu-box text-neu-highlight' : 'hover:bg-neu-box text-neu-text hover:text-neu-highlight';
       
-        html += `<button onclick="switchSubject('${subject.id}')" class="px-5 py-2 font-medium text-xs rounded-xl transition-all ${btnClass}">${shortName}</button>`;
-      });
-    
-      container.innerHTML = html;
-    }
-
-    function switchSubject(subjectId) {
-      targetedSubjectFilter = subjectId;
-      renderSubjectRoots();
-      renderCurriculumStructure();
-    }
-
-    function switchTab(type) {
-        targetedActiveFilter = type;
-        targetedSubjectFilter = 'all'; // Reset subject filter when changing semesters
-        ['sem3', 'sem1'].forEach(t => {
-          const btn = document.getElementById(`tab-${t}`);
-          if (btn) {
-            const isSelected = (t === type);
-            const shadow = isSelected ? "shadow-neu-in" : "shadow-neu-out";
-        
-            let color = "";
-            if (t === 'sem1') {
-              color = isSelected ? "text-red-600" : "text-red-500 hover:text-red-600";
-            } else {
-              color = isSelected ? "text-neu-highlight" : "text-neu-text hover:text-neu-highlight";
-            }
-        
-            btn.className = `px-6 py-3 font-medium text-sm rounded-2xl transition-all ${shadow} ${color}`;
-          }
+          html += `<button onclick="switchSubject('${subject.id}')" class="px-5 py-2 font-medium text-xs rounded-xl transition-all ${btnClass}">${shortName}</button>`;
         });
+    
+        container.innerHTML = html;
+      }
+
+      function switchSubject(subjectId) {
+        targetedSubjectFilter = subjectId;
         renderSubjectRoots();
         renderCurriculumStructure();
       }
+
+      function switchTab(type) {
+          targetedActiveFilter = type;
+          targetedSubjectFilter = 'all'; // Reset subject filter when changing semesters
+          ['sem3', 'sem1'].forEach(t => {
+            const btn = document.getElementById(`tab-${t}`);
+            if (btn) {
+              const isSelected = (t === type);
+              const bgClass = isSelected ? "bg-neu-box" : "hover:bg-neu-box";
+        
+              let color = "";
+              if (t === 'sem1') {
+                color = isSelected ? "text-red-600" : "text-red-500 hover:text-red-600";
+              } else {
+                color = isSelected ? "text-neu-highlight" : "text-neu-text hover:text-neu-highlight";
+              }
+        
+              btn.className = `px-6 py-3 font-medium text-sm rounded-2xl transition-all ${bgClass} ${color}`;
+            }
+          });
+          renderSubjectRoots();
+          renderCurriculumStructure();
+        }
 
     function updateSyncStatus(msg, isProcessing = false, isError = false) {
       const dot = document.getElementById('sync-dot');
