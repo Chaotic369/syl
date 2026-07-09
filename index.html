@@ -99,9 +99,8 @@ tailwind.config = {
             </section>
 
     <div class="flex flex-wrap gap-4 mb-8 px-2">
-          <button onclick="switchTab('all')" id="tab-all" class="px-6 py-3 font-medium text-sm shadow-neu-in text-neu-highlight rounded-2xl transition-all">All Semesters</button>
+          <button onclick="switchTab('sem3')" id="tab-sem3" class="px-6 py-3 font-medium text-sm shadow-neu-in text-neu-highlight rounded-2xl transition-all">Semester III</button>
           <button onclick="switchTab('sem1')" id="tab-sem1" class="px-6 py-3 font-medium text-sm shadow-neu-out text-neu-text hover:text-neu-highlight rounded-2xl transition-all">Semester I</button>
-          <button onclick="switchTab('sem3')" id="tab-sem3" class="px-6 py-3 font-medium text-sm shadow-neu-out text-neu-text hover:text-neu-highlight rounded-2xl transition-all">Semester III</button>
         </div>
 
         <div id="subject-roots" class="flex flex-wrap gap-3 mb-10 px-2 hidden"></div>
@@ -412,7 +411,7 @@ tailwind.config = {
   const USER_DOC = db.collection('syllabus_tracker').doc('global_user_1');
 
   let completedTopicsMap = {};
-    let targetedActiveFilter = 'all';
+    let targetedActiveFilter = 'sem3';
     let targetedSubjectFilter = 'all';
 
     const subjectShortNames = {
@@ -550,12 +549,6 @@ tailwind.config = {
       const container = document.getElementById('subject-roots');
       if (!container) return;
     
-      if (targetedActiveFilter === 'all') {
-        container.classList.add('hidden');
-        container.innerHTML = '';
-        return;
-      }
-    
       container.classList.remove('hidden');
       let html = `<button onclick="switchSubject('all')" class="px-5 py-2 font-medium text-xs rounded-xl transition-all ${targetedSubjectFilter === 'all' ? 'shadow-neu-in text-neu-highlight' : 'shadow-neu-out text-neu-text hover:text-neu-highlight'}">All</button>`;
     
@@ -580,19 +573,21 @@ tailwind.config = {
     }
 
     function switchTab(type) {
-      targetedActiveFilter = type;
-      targetedSubjectFilter = 'all'; // Reset subject filter when changing semesters
-      ['all', 'sem1', 'sem3'].forEach(t => {
-        const btn = document.getElementById(`tab-${t}`);
-        if (t === type) {
-          btn.className = "px-6 py-3 font-medium text-sm shadow-neu-in text-neu-highlight rounded-2xl transition-all";
-        } else {
-          btn.className = "px-6 py-3 font-medium text-sm shadow-neu-out text-neu-text hover:text-neu-highlight rounded-2xl transition-all";
-        }
-      });
-      renderSubjectRoots();
-      renderCurriculumStructure();
-    }
+        targetedActiveFilter = type;
+        targetedSubjectFilter = 'all'; // Reset subject filter when changing semesters
+        ['sem3', 'sem1'].forEach(t => {
+          const btn = document.getElementById(`tab-${t}`);
+          if (btn) {
+            if (t === type) {
+              btn.className = "px-6 py-3 font-medium text-sm shadow-neu-in text-neu-highlight rounded-2xl transition-all";
+            } else {
+              btn.className = "px-6 py-3 font-medium text-sm shadow-neu-out text-neu-text hover:text-neu-highlight rounded-2xl transition-all";
+            }
+          }
+        });
+        renderSubjectRoots();
+        renderCurriculumStructure();
+      }
 
     function updateSyncStatus(msg, isProcessing = false, isError = false) {
       const dot = document.getElementById('sync-dot');
@@ -633,11 +628,12 @@ tailwind.config = {
         updateSyncStatus('New Profile Ready');
       }
     } catch(e) {
-      console.error("Initialization data lookup crashed:", e);
-      updateSyncStatus('Offline / Connection Failed', false, true);
-    }
-    renderCurriculumStructure();
-  });
+          console.error("Initialization data lookup crashed:", e);
+          updateSyncStatus('Offline / Connection Failed', false, true);
+        }
+        renderSubjectRoots();
+        renderCurriculumStructure();
+      });
   </script>
 </body>
 </html>
