@@ -579,43 +579,45 @@ tailwind.config = {
   }
 
   // Cloud Storage Engine Sync Loops
-  function updateSyncStatus(msg, isProcessing = false) {
-    const statusBox = document.getElementById('sync-status');
-    if (isProcessing) {
-      statusBox.innerHTML = `<i class="fa-solid fa-arrows-rotate text-vlc-orange animate-spin"></i> ${msg}`;
-    } else {
-      statusBox.innerHTML = `<i class="fa-solid fa-cloud-check text-green-600"></i> ${msg}`;
-    }
-  }
-
-  async function saveCloudState() {
-    updateSyncStatus('Syncing changes...', true);
-    try {
-      await USER_DOC.set({ completedTopicsMap });
-      updateSyncStatus('Cloud Synced');
-    } catch (e) {
-      console.error("Cloud synchronization failure:", e);
-      statusBox.innerHTML = `<i class="fa-solid fa-circle-exclamation text-red-500"></i> Sync Error`;
-    }
-  }
-
-  // Lifecyle Initialization Hook Loading Initial Values
-  window.addEventListener('DOMContentLoaded', async () => {
-    updateSyncStatus('Loading curriculum data...', true);
-    try {
-      const doc = await USER_DOC.get();
-      if (doc.exists) {
-        completedTopicsMap = doc.data().completedTopicsMap || {};
-        updateSyncStatus('Data Loaded');
+    function updateSyncStatus(msg, isProcessing = false, isError = false) {
+      const statusBox = document.getElementById('sync-status');
+      if (isProcessing) {
+        statusBox.innerHTML = `<i class="fa-solid fa-arrows-rotate text-vlc-orange animate-spin"></i> ${msg}`;
+      } else if (isError) {
+        statusBox.innerHTML = `<i class="fa-solid fa-circle-exclamation text-red-500"></i> <span class="text-red-600 font-bold">${msg}</span>`;
       } else {
-        updateSyncStatus('No remote profile found');
+        statusBox.innerHTML = `<i class="fa-solid fa-cloud-check text-green-600"></i> <span class="text-green-700 font-bold">${msg}</span>`;
       }
-    } catch(e) {
-      console.error("Initialization data lookup crashed:", e);
-      updateSyncStatus('Offline Mode active');
     }
-    renderCurriculumStructure();
-  });
+
+    async function saveCloudState() {
+      updateSyncStatus('Syncing changes...', true);
+      try {
+        await USER_DOC.set({ completedTopicsMap });
+        updateSyncStatus('Cloud Synced');
+      } catch (e) {
+        console.error("Cloud synchronization failure:", e);
+        updateSyncStatus('Sync Error (Check Console)', false, true);
+      }
+    }
+
+    // Lifecyle Initialization Hook Loading Initial Values
+    window.addEventListener('DOMContentLoaded', async () => {
+      updateSyncStatus('Loading curriculum data...', true);
+      try {
+        const doc = await USER_DOC.get();
+        if (doc.exists) {
+          completedTopicsMap = doc.data().completedTopicsMap || {};
+          updateSyncStatus('Data Loaded & Synced');
+        } else {
+          updateSyncStatus('No remote profile found');
+        }
+      } catch(e) {
+        console.error("Initialization data lookup crashed:", e);
+        updateSyncStatus('Offline / Connection Failed', false, true);
+      }
+      renderCurriculumStructure();
+    });
   </script>
 </body>
 </html>
